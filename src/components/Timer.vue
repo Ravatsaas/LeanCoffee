@@ -15,7 +15,7 @@
             <button v-on:click="startExtension" :disabled="!expired" class="btn-primary">More Time</button>
         </div>
         <div class="card">
-            <input type="text" size="35" v-model="nextTopic" placeholder="Next topic (optional)"/>
+            <input type="text" size="30" v-model="nextTopic" placeholder="Next topic (optional)"/>
             <TimeInput v-model="topicTime"></TimeInput>
             <button v-on:click="startTopic" :disabled="timeRemaining > 0" class="btn-primary">Start</button>
         </div>
@@ -92,6 +92,7 @@ export default class Timer extends Vue {
     }
 
     cancelTimer() {
+        clearInterval(this.timerId);
         this.timeRemaining = 0;
     }
 }
@@ -105,14 +106,13 @@ export default class Timer extends Vue {
 
 #topic {
     font-family: Roboto, Helvetica, sans-serif;
-    font-size: 1.4em;
 }
 
 .card {
     background-color: #444;
-    margin: 15px auto;
-    padding: 15px;
-    width: 30em;
+    margin: 10px auto;
+    padding: 10px;
+    width: 20em;
     border-radius: 10px;
 }
 
@@ -121,11 +121,10 @@ input[type="text"] {
     border: 1px solid #aaa;
     padding: 10px;
     margin: 5px;
-    font-size: 1.4em;
     border-radius: 10px;
 }
 
 div {
-    margin: 15px;
+    margin: 10px;
 }
 </style>

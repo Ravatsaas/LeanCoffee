@@ -37,7 +37,7 @@ body {
 
 h1 {
   font-family: 'Lobster', cursive;
-  font-size: 4em;
+  font-size: 3em;
 }
 
 button {
@@ -45,7 +45,6 @@ button {
     border: 0;
     padding: 10px;
     margin: 5px;
-    font-size: 1.4em;
     border-radius: 10px;
     cursor: pointer;
 }

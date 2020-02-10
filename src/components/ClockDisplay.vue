@@ -36,6 +36,5 @@ export default class ClockDisplay extends Vue {
 #clock {
     display: inline-block;
     font-family: Roboto, Helvetica, sans-serif;
-    font-size: 1.4em;
 }
 </style>

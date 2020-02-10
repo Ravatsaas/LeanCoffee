@@ -1,8 +1,8 @@
 <template>
     <div id="component">
-        <button id="btn-dec" v-on:click="decrement" :disabled="value <= interval"><span>-</span></button>
+        <button id="btn-dec" v-on:click="decrement" :disabled="value <= interval">-</button>
         <div id="clock-container"><ClockDisplay id="clock" :timeInSeconds="value"></ClockDisplay></div>
-        <button id="btn-inc" v-on:click="increment"><span>+</span></button>
+        <button id="btn-inc" v-on:click="increment">+</button>
     </div>
 </template>
 
@@ -68,7 +68,7 @@ export default class TimeInput extends Vue {
 
 button {
     display:inline-block;
-    width: 50px;
+    width: 40px;
     padding: 0;
     margin: 0;
 }
