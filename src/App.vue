@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Lean Coffee</h1>
+    <h1>Lean Café</h1>
     <Timer/>
   </div>
 </template>

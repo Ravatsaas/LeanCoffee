@@ -1,4 +1,6 @@
-# lean-coffee
+# Lean Café
+
+See it in action at [LeanCafe.app](https://leancafe.app)
 
 ## Project setup
 ```
