@@ -11,8 +11,8 @@
             <button v-on:click="cancelTimer" :disabled="timeRemaining <= 0" class="btn-secondary">Cancel</button>
         </div>
         <div v-if="expired">
-            <TimeInput v-model="extensionTime"></TimeInput>
-            <button v-on:click="startExtension" :disabled="!expired" class="btn-primary">More Time</button>
+            <!--TimeInput v-model="extensionTime"></TimeInput-->
+            <button v-on:click="startExtension" :disabled="!expired" class="btn-primary">Add {{getExtensionTime(extensionCount + 1) | minutesAndSeconds}}</button>
         </div>
         <div class="card">
             <input type="text" size="30" v-model="nextTopic" placeholder="Next topic (optional)"/>
@@ -36,23 +36,23 @@ import TimeInput from './TimeInput.vue';
         TimeInput
     },
     filters: {
-        zeroPadded: function(value: number, length: number): string {
-            let paddingLength = length - value.toString().length;
-            if (paddingLength <= 0) {
-                return value.toString();
-            }
-            return '0'.repeat(paddingLength) + value;
-        }
+        minutesAndSeconds: function(value: number) {
+            let minutes = Math.floor(value / 60);
+            let seconds = value % 60;
+
+            return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+        }        
     }
 })
 export default class Timer extends Vue {
 
     private timerId: number = -1;
     private ding: HTMLAudioElement = new Audio(require("../assets/service-bell.mp3"));
-    public topicTime: number = 300;
-    public extensionTime: number = 120;
+    public topicTime: number = 480;
+    public extensionTime: number = 0;
     public startTime: number = 0;
     public timeRemaining: number = 0;
+    public extensionCount = 0;
     public currentTopic: string = "";
     public nextTopic: string = "";
     public expired: boolean = false;
@@ -84,11 +84,22 @@ export default class Timer extends Vue {
     startTopic() {
         this.currentTopic = this.nextTopic;
         this.nextTopic = "";
+        this.extensionCount = 0;
+
         this.startTimer(this.topicTime)
     }
 
     startExtension() {
-        this.startTimer(this.extensionTime);
+        this.extensionCount ++;
+        this.startTimer(this.getExtensionTime(this.extensionCount)); 
+    }
+
+    getExtensionTime(extensionNum: number) : number {
+        switch(extensionNum) {
+            case 0: return this.topicTime;
+            case 1: return Math.round(this.topicTime / 2);
+            default: return Math.round(this.topicTime / 4);
+        }
     }
 
     cancelTimer() {
