@@ -124,23 +124,22 @@ export default class Cup extends Vue {
 
 <style scoped>
 .cup-fill {
-    fill: #432;
     fill: url(#coffee-gradient)
 }
 
 .cup {
-    fill: #444;
+    fill: #fff;
 }
 
 .cup-handle {
-    stroke: #444;
+    stroke: #fff;
 }
 
 .cup-empty {
-    stop-color:#ddd
+    stop-color:#aaa;
 }
 
 .cup-filled {
-    stop-color: #765;
+    stop-color: #432;
 }
 </style>

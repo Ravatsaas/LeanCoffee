@@ -1,7 +1,13 @@
 <template>
   <div id="app">
-    <h1>Lean Café</h1>
-    <Timer/>
+    <md-app>
+      <md-app-toolbar>
+        <h1>Lean Café</h1>
+      </md-app-toolbar>
+      <md-app-content>
+        <Timer/>
+      </md-app-content>
+    </md-app>
   </div>
 </template>
 
@@ -9,6 +15,11 @@
 import { Component, Vue } from 'vue-property-decorator';
 import Timer from './components/Timer.vue';
 import Cup from './components/Cup.vue';
+import VueMaterial from 'vue-material';
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default-dark.css'
+
+Vue.use(VueMaterial);
 
 @Component({
   components: {
@@ -22,18 +33,18 @@ export default class App extends Vue {}
 <style>
 @import url('https://fonts.googleapis.com/css?family=Lobster|Roboto&display=swap');
 
-body {
+/* body {
   background-color: #eee;
-}
+} */
 
-#app {
+/*#app {
   font-family: Roboto, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-}
+} */
 
 h1 {
   font-family: 'Lobster', cursive;
