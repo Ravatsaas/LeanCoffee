@@ -13,7 +13,6 @@
             <md-button v-on:click="cancelTimer" :disabled="timeRemaining <= 0" class="btn-secondary">Cancel</md-button>
         </div>
         <div v-if="expired" class="md-layout-item md-size-100">
-            <!--TimeInput v-model="extensionTime"></TimeInput-->
             <md-button v-on:click="startExtension" :disabled="!expired" class="md-raised md-primary">Add {{getExtensionTime(extensionCount + 1) | minutesAndSeconds}}</md-button>
         </div>
         <div id="card-container" class="md-layout-item md-layout md-alignment-top-center md-size-100">
@@ -30,7 +29,6 @@
                             </md-field>
                         </div>
                        <div class="md-layout-item md-size-30 md-xsmall-size-100">
-                            <!-- <TimeInput v-model="topicTime"></TimeInput> -->
                             <md-field>
                             <label for="startTime">Time</label>
                                 <md-select v-model="topicTime" name="startTime" id="startTime">
@@ -54,6 +52,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import Cup from './Cup.vue';
 import ClockDisplay from './ClockDisplay.vue';
 import TimeInput from './TimeInput.vue';
+import BackgroundTimer from "worker-loader!./backgroundTimer.worker";
 
 @Component({
     components : {
@@ -71,9 +70,9 @@ import TimeInput from './TimeInput.vue';
     }
 })
 export default class Timer extends Vue {
-
-    private timerId: number = -1;
     private ding: HTMLAudioElement = new Audio(require("../assets/service-bell.mp3"));
+    
+    private backgroundTimer = new BackgroundTimer()
     public topicTime: number = 480;
     public extensionTime: number = 0;
     public startTime: number = 0;
@@ -82,29 +81,45 @@ export default class Timer extends Vue {
     public currentTopic: string = "";
     public nextTopic: string = "";
     public expired: boolean = false;
-    
+
     get progress() : number {
         return this.timeRemaining / this.startTime;
     }
 
-    onSecond() {
-        if (this.timeRemaining <= 0) {
-            this.expired = true;
-            this.ding.play();
-            clearInterval(this.timerId);
-        } else {
-            this.timeRemaining --;
-        }
-    }
-
     startTimer(time: number) {
-        if(this.timerId != -1) {
-            clearInterval(this.timerId);
-        }
+        this.backgroundTimer.postMessage("stop");
         this.expired = false;
         this.startTime = time
         this.timeRemaining = time;
-        this.timerId = setInterval(this.onSecond, 1000);      
+        this.backgroundTimer.onmessage = this.onTimerMessage
+        this.backgroundTimer.postMessage("start");
+    }
+
+    stopTimer() {
+        this.backgroundTimer.postMessage("stop");
+    }
+
+    onTimerMessage(ev: MessageEvent) {
+        switch(ev.data) {
+            case "tick":
+                this.tick();
+                break;
+            default:
+                console.log(`Unhandled message from background timer: ${ev.data}`)
+        }
+
+        if (ev.data != "tick")
+            return
+    }
+
+    tick() {
+        if (this.timeRemaining <= 1) {
+            this.expired = true;
+            this.ding.play();
+            this.stopTimer();
+        } else {
+            this.timeRemaining --;
+        }
     }
 
     startTopic() {
@@ -129,7 +144,7 @@ export default class Timer extends Vue {
     }
 
     cancelTimer() {
-        clearInterval(this.timerId);
+        this.stopTimer();
         this.timeRemaining = 0;
     }
 }
