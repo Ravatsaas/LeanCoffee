@@ -117,9 +117,8 @@ export default class Timer extends Vue {
             this.expired = true;
             this.ding.play();
             this.stopTimer();
-        } else {
-            this.timeRemaining --;
-        }
+        }   
+        this.timeRemaining --;
     }
 
     startTopic() {
